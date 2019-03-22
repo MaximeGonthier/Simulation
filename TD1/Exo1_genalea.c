@@ -34,7 +34,12 @@ int nb_arrivees (double p0, double p2) {
 }
 
 int Condition_arret (long double Old, long double New) {
-	
+	if (fabs(Old-New) < EPSILON && temps > 1000)
+	{
+		compteur++;
+		if (compteur > 1e5) {return 1;}
+	}
+	return 0;
 }
 
 void Arrive_Event(){
@@ -60,10 +65,10 @@ void Simulateur(FILE*f1) {
 	//long double OldNmoyen
 	long double Nmoyen;
 	
-	while (arret > 0) //Condition_arret(OldNmoyen,Nmoyen) == 0)
+	while (Condition_arret(OldNmoyen,Nmoyen) == 0) //arret > 0
 	 {
 		Arrive_Event();
-		//OldNmoyen = Nmoyen;
+		OldNmoyen = Nmoyen;
 		Nmoyen = (long double)cumule/temps;
 		fprintf(f1, "%5ld   %Lf \n", temps, Nmoyen);
 	
