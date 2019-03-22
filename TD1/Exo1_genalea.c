@@ -9,7 +9,7 @@
 long int temps = 1;
 long int tempsvide = 0;
 long int n = 0;	//nombre de clients dans la file a l'instant temps
-long int cumul = 0; //nombre de clients au totale a l'instant temps
+long int cumule = 0; //nombre de clients au totale a l'instant temps
 int arret = 1e6;	//cond d'aret
 int compteur = 0; //cond d'arret
 
@@ -45,6 +45,7 @@ void Service_Event() {
 		n--;
 		arret--;
 	}
+}
 
 
 void Simulateur(FILE*f1) {
@@ -74,7 +75,7 @@ void Simulateur(FILE*f1) {
 
 int main(int argc, char *argv[]) {
 	
-	FILE f1 = fopen("Simulation_CST.data","w");
+	FILE *f1 = fopen("Simulation_CST.data","w");
 	srandom(getpid() + time(NULL));
 	Simulateur(f1);
 	fclose(f1);
@@ -84,5 +85,4 @@ int main(int argc, char *argv[]) {
 		//~ long int a = random()%10;
 		//~ printf("%ld\n",a);
 	//~ }
-	
 }
