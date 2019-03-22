@@ -1,0 +1,2 @@
+En alea, on génére la meme chose a chaque exec avec random();
+Sradom sert a initialiser la seed
