@@ -19,15 +19,15 @@ Tapez 'q()' pour quitter R.
 
 > # pour executer le code : R CMD BATCH "Draw.R"
 > 
-> modelname = "Simulation_CST.data"
+> modelname = "Test.data"
 > data = read.table(modelname)
 > attach(data);
 > 
-> temps = V1
-> Moyenne = V2
+> iteration = V1
+> pertincence = V2
 > 
-> plot(temps,Moyenne,type="l",xlab="temps",ylab="E[N]",col="red")
+> plot(temps,Moyenne,type="l",xlab="ite",ylab="perti",col="red")
 > 
 > proc.time()
 utilisateur     système      écoulé 
-      6.063       0.569       6.803 
+      1.721       0.094       1.829 
