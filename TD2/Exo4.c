@@ -84,10 +84,37 @@ void Arrive_Event(event e) {
 void Service_Event(event e)	//service = Mu
 {
 	if (n>0) {
+		n--;
 		e.type = 1;
 		e.date = e.date + Exponnentielle(Mu);
 		e.etat = 0;
-		n--;
+		
+		Ajouter_Ech(e1);
 	}
+	temps = e.date;
+}
+
+event Extraire() {
+	int i,imin;
+	event min;
+	
+	for (i = 0; i < Ech.taille; i++) {
+		if(Ech.Tab[i].etat == 0) {
+			min = Ech.Tab[i];
+			imin = i;
+			break;
+		}
+	}
+	for (i = 0; i < Ech.taille; i++) {
+		if(min.date > Ech.Tab[i].date && Ech.Tab[i].etat == 0) {
+			min = Ech.Tab[i];
+			imin = i;
+		}
+	}
+	
+	Ech.Tab[imin].etat = 1;
+	return min;
+}
+
 	
 	
