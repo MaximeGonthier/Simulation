@@ -31,8 +31,63 @@ typedef struct Echeancier {
 echeancier Ech;
 
 double Exponnentielle(int lbda) {
-	double r = (double)random()/RAND_MAX;
+	double r = (double)random()/RAND_MAX;	//entre 0 et 1
 	
 	while(r==0 || r==1) {	//tant que x vaut 0 ou 1 on refait un random
 		r = (double)random()/RAND_MAX;
+	}
+	return -log(r)/(lbda*1.0); // - log(u)/lamda, avec U = unif(0,1)
+}
 
+void Ajouter_Ech(event e) {
+	if(Ech.taille < MAXEVENT) {
+		Ech.Tab[Ech.taille] = e;
+		Ech.taille++;
+		printf("Taille = %d\n", Ech.taille);
+	}
+	else (printf("echeancier PLEIN");)
+}
+
+void Init Ech(){
+	event e;
+	e.type = 0;
+	e.date = 0;
+	e.etat = 0;
+	Ech.taille = 0;
+	Ajouter_Ech(e);
+}
+
+void Arrive_Event(event e) {
+	printf("execution Arrivé Client\n");
+	n++;
+	
+	event e1;
+	e1.type = 0;
+	e1.date = e.date + Exponnentielle(Lambda);
+	e1.etat = 0;
+	
+	Ajouter_Ech(e1);
+	
+	if (n == 1) {
+		event e2;
+		e2.type = 1;
+		e2.date = e.date + Exponnentielle(Mu);
+		e2.etat = 0;
+		
+		Ajouter_Ech(e2);
+	}
+	
+	temps = e.date;
+	
+}
+
+void Service_Event(event e)	//service = Mu
+{
+	if (n>0) {
+		e.type = 1;
+		e.date = e.date + Exponnentielle(Mu);
+		e.etat = 0;
+		n--;
+	}
+	
+	
