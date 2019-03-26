@@ -3,4 +3,9 @@ En alea, on génére la meme chose a chaque exec avec random();
 Sradom sert a initialiser la seed
 getpid retorun l'id du processus appelant
 
-Exo2
+TD2
+
+expo et poisson simule l'évènement d'arrivé et de sortie. 
+lambda : entre	u : sortie
+lambda < u
+p = lambda/u
