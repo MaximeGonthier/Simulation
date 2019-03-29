@@ -4,13 +4,13 @@
 #include <unistd.h>
 #include <time.h>
 #include <math.h>
-
+//-lm pour compiler
 #define Lambda 9
 #define Mu 10
 
 #define EPSILON 1e-5
 #define MAXEVENT 1000000	//taille max de l'echeancier
-#define MAXTEMPS 5000	//cond d'arret
+#define MAXTEMPS 1000	//cond d'arret
 
 double temps = 0;
 long int n = 0;		//nb de clients dans la file a l'instant temps
@@ -24,7 +24,7 @@ typedef struct Event {
 }event;
 
 typedef struct Echeancier {
-	event TAB[MAXEVENT];
+	event Tab[MAXEVENT];
 	int taille;
 }echeancier;
 
@@ -45,10 +45,10 @@ void Ajouter_Ech(event e) {
 		Ech.taille++;
 		printf("Taille = %d\n", Ech.taille);
 	}
-	else (printf("echeancier PLEIN");)
+	else (printf("echeancier PLEIN"));
 }
 
-void Init Ech(){
+void Init_Ech(){
 	event e;
 	e.type = 0;
 	e.date = 0;
@@ -89,7 +89,7 @@ void Service_Event(event e)	//service = Mu
 		e.date = e.date + Exponnentielle(Mu);
 		e.etat = 0;
 		
-		Ajouter_Ech(e1);
+		Ajouter_Ech(e);
 	}
 	temps = e.date;
 }
@@ -116,5 +116,61 @@ event Extraire() {
 	return min;
 }
 
+void affiche_echeancier() {
 	
+	event e;
+	printf (" temps %f et N = %ld taille : %d ", temps,n,Ech.taille);
+	for (int i = 0; i < Ech.taille; i++)
+	{
+		e = Ech.Tab[i];
+		
+		if (e.type == 0) { printf (" arrive client %lf %d",e.date,e.etat);
+		}
+		if (e.type == 1) { printf ("FS %lf %d",e.date,e.etat);
+		}
+	}
+		printf("\n \n");
+}
+
+int Condition_arret (long double Old, long double New) {
+	if (fabs(Old-New) < EPSILON && temps > 1000)
+	{
+		compteur++;
+		if (compteur > 1e3) {return 1;}
+	}
+	return 0;
+}
+
+void Simulateur(FILE *f1) {
+	long double OldNmoyen;
+	long double Nmoyen;
+	Init_Ech();
+	event e;
+	//while (Condition_arret(OldNmoyen,Nmoyen) == 0) //temps < temps MAX // arret > 0
+	while (temps < MAXTEMPS)
+	{
+		e = Extraire();
+		cumule += (e.date-temps)*n;
+		OldNmoyen = Nmoyen;
+		Nmoyen = cumule/temps;
+		if(temps == 0) {
+			printf ("temps = 0 et N = 0 et Nmoyen = 0 \n");
+			fprintf(f1,"0    0 \n");
+		}
+		else {
+			printf("temps = %f et N = %ld et Nmoyen = %Lf\n",temps,n,Nmoyen);
+			fprintf(f1,"%f     %Lf  \n",temps,Nmoyen);
+		}
+		
+		if (e.type == 0) { Arrive_Event(e); }
+		if (e.type == 1) { Service_Event(e); }
+	}
+}
+int main () {
+	FILE *f1 = fopen("Simulation_MM1.data","w");
+	srandom(getpid() + time(NULL));
+	Simulateur (f1);
+	fclose(f1);
+	exit(0);
+}
 	
